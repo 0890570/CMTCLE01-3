@@ -5,25 +5,25 @@ require_once('../includes/template/admin/header.php'); ?>
 <?php
 
 // Haal beheerders op, hoofdbeheerder kan niet worden verwijderd. Hoofdbeheerder kan andere accounts verwijderen
-$get_animals = mysqli_query($db, "SELECT * FROM `dier` ORDER BY `id` ASC");
+$get_animals = mysqli_query($db, "SELECT * FROM `dier` ORDER BY `naam` ASC");
 ?>
     <div class="table-users">
         <div class="title"><p>Overzicht diersoorten</p></div>
 
         <table class="user-table">
             <thead>
-            <th>#</th>
             <th>Diernaam</th>
+            <th>Wijzigen</th>
+            <th>Verwijderen</th>
             </thead>
             <?php
             while($animal = mysqli_fetch_assoc($get_animals))
             {
                 ?>
                 <tr>
-                    <td><?= $animal['id'];?></td>
                     <td><?= $animal['naam'];?></td>
                     <td><a href="animal_edit.php?id=<?=$animal['id'];?>">Wijzig</a></td>
-                    <td><a href="animal_edit.php?id=<?=$animal['id'];?>">Verwijderen</a></td>
+                    <td><a href="animal_delete.php?id=<?=$animal['id'];?>">Verwijderen</a></td>
                 </tr>
                 <?php
             }
