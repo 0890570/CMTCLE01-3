@@ -16,35 +16,6 @@ if (isset ($_POST['diersoort'])) {
     echo $diersoort;
 }
 
-
-//if (isset($_POST['diersoort'])) {
-//    if ($_POST['diersoort'] == 'geit') {
-//        // query to get all white records
-//        $query .= "WHERE diersoort='1'";
-//        $keuze = "geit";
-//    } elseif ($_POST['diersoort'] == 'kip') {
-//        // query to get all black records
-//        $query .= "WHERE diersoort='2'";
-//        $keuze = "kip";
-//    } elseif ($_POST['diersoort'] == 'koe') {
-//        // query to get all black records
-//        $query .= "WHERE diersoort='3'";
-//        $keuze = "koe";
-//    } elseif ($_POST['diersoort'] == 'schaap') {
-//        // query to get all black records
-//        $query .= "WHERE diersoort='4";
-//        $keuze = "schaap";
-//    } elseif ($_POST['diersoort'] == 'varken') {
-//        // query to get all black records
-//        $query .= "WHERE diersoort='5'";
-//        $keuze = "varken";
-//    } elseif ($_POST['diersoort'] == 'konijn') {
-//        // query to get all black records
-//        $query .="WHERE diersoort='6'";
-//        $keuze = "konijn";
-//    }
-//}
-
 $query .= "ORDER BY RAND()
             LIMIT 10";
 
@@ -124,7 +95,7 @@ Quiz vragen<br />
 <!--Geolocation API-->
 <script>
 
-    
+
         var x = document.getElementById("demo");
 
     function getLocation() {
