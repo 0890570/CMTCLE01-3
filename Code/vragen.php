@@ -3,36 +3,50 @@ session_start();
 require_once('includes/template/header.php');
 
 $query = "SELECT *
-            FROM vragen
+            FROM `vragen`
+            INNER JOIN `dier`
+            ON `dier`.`id` = `vragen`.`diersoort`
             ";
 
-if (isset($_POST['diersoort'])) {
-    if ($_POST['diersoort'] == 'geit') {
-        // query to get all white records
-        $query .= "WHERE diersoort='0'";
-        $keuze = "geit";
-    } elseif ($_POST['diersoort'] == 'kip') {
-        // query to get all black records
-        $query .= "WHERE diersoort='1'";
-        $keuze = "kip";
-    } elseif ($_POST['diersoort'] == 'koe') {
-        // query to get all black records
-        $query .= "WHERE diersoort='2'";
-        $keuze = "koe";
-    } elseif ($_POST['diersoort'] == 'schaap') {
-        // query to get all black records
-        $query .= "WHERE diersoort='3'";
-        $keuze = "schaap";
-    } elseif ($_POST['diersoort'] == 'varken') {
-        // query to get all black records
-        $query .= "WHERE diersoort='4'";
-        $keuze = "varken";
-    } elseif ($_POST['diersoort'] == 'konijn') {
-        // query to get all black records
-        $query .="WHERE diersoort='5'";
-        $keuze = "konijn";
-    }
+
+if (isset ($_POST['diersoort'])) {
+    $diersoort = $_POST['diersoort'];
+    $query .= "WHERE naam = '$diersoort'
+    ";
+    echo $diersoort;
 }
+
+
+//if (isset($_POST['diersoort'])) {
+//    if ($_POST['diersoort'] == 'geit') {
+//        // query to get all white records
+//        $query .= "WHERE diersoort='1'";
+//        $keuze = "geit";
+//    } elseif ($_POST['diersoort'] == 'kip') {
+//        // query to get all black records
+//        $query .= "WHERE diersoort='2'";
+//        $keuze = "kip";
+//    } elseif ($_POST['diersoort'] == 'koe') {
+//        // query to get all black records
+//        $query .= "WHERE diersoort='3'";
+//        $keuze = "koe";
+//    } elseif ($_POST['diersoort'] == 'schaap') {
+//        // query to get all black records
+//        $query .= "WHERE diersoort='4";
+//        $keuze = "schaap";
+//    } elseif ($_POST['diersoort'] == 'varken') {
+//        // query to get all black records
+//        $query .= "WHERE diersoort='5'";
+//        $keuze = "varken";
+//    } elseif ($_POST['diersoort'] == 'konijn') {
+//        // query to get all black records
+//        $query .="WHERE diersoort='6'";
+//        $keuze = "konijn";
+//    }
+//}
+
+$query .= "ORDER BY RAND()
+            LIMIT 10";
 
 if (isset($_POST['quiz-vragen']) && !empty($_POST['quiz-vragen'])) {
     $radio_value = $_POST["radio"];
@@ -48,7 +62,7 @@ if (isset($_POST['quiz-vragen']) && !empty($_POST['quiz-vragen'])) {
 }
 $result = mysqli_query($db, $query);
 
-
+$get_animals = mysqli_query($db, "SELECT * FROM `dier` ORDER BY `id` ASC");
 ?>
 
 <!DOCTYPE html>
@@ -77,23 +91,22 @@ $result = mysqli_query($db, $query);
 <p id="error"></p>
 
 Quiz vragen<br />
-<div class="quiz" style="display: none; background-color: pink;">
+<div class="quiz" style="display: none; background-image: url(http://bs1.imghost.nu/images/1/98646.jpg); color: white;">
     <form action="vragen.php" method="post" name ='diersoorten'>
         <select name="diersoort">
-            <option name = "diersoort" value="geit">Geit</option>
-            <option name = "diersoort" value="kip">Kip</option>
-            <option name = "diersoort" value="koe">Koe</option>
-            <option name = "diersoort" value="schaap">Schaap</option>
-            <option name = "diersoort" value="varken">Varken</option>
-            <option name = "diersoort" value="konijn">Konijn</option>
+            <?php
+            while($animal = mysqli_fetch_assoc($get_animals)){?>
+                <option name="diersoort" value="<?= $animal['naam'];?>"><?= $animal['naam'];?></option>
+            <?php }
+            ?>
         </select>
         <input type="submit" value="Zoeken">
     </form>
 
     <form action="vragen.php" method="post" name='quiz-vragen'>
-
         <?php while($row = mysqli_fetch_array($result)) {?>
                 <b>Vraag: </b> <?=$row['vraag']?><br />
+                <b>Diersoort: </b> <?=$row['naam']?><br />
                 <input type="radio" name="radio" value="correct_antwoord">
                 <label for="correct_antwoord"><?=$row['correct_antwoord']?></label><br>
 
@@ -107,8 +120,12 @@ Quiz vragen<br />
         <?php } ?>
     </form>
 </div>
+
+<!--Geolocation API-->
 <script>
-    var x = document.getElementById("demo");
+
+    
+        var x = document.getElementById("demo");
 
     function getLocation() {
         if (navigator.geolocation) {
@@ -151,5 +168,8 @@ Quiz vragen<br />
                 break;
         }
     }
+</script>
+<script async defer
+        src="https://www.googleapis.com/geolocation/v1/geolocate?key=">
 </script>
 </body>
