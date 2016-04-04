@@ -8,3 +8,5 @@ password: eifieruv
 You can use this information in your script to store information in the
 database. And you can use it to administer your database through
 https://sql.hosted.hro.nl/
+
+Good luck to all!
